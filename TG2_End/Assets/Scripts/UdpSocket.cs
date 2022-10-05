@@ -38,9 +38,11 @@ public class UdpSocket : MonoBehaviour
     //String Received
     //public static string[] textArray;
     public string[] str_text;
+    public int idIMU;
+    public Quaternion receivedQuaternion;
 
 
-    IEnumerator SendDataCoroutine() // DELETE THIS: Added to show sending data from Unity to Python via UDP
+    IEnumerator SendDataCoroutine() //  Added to show sending data from Unity to Python via UDP
     {
         while (true)
         {
@@ -80,7 +82,7 @@ public class UdpSocket : MonoBehaviour
         // Initialize (seen in comments window)
         print("UDP Comms Initialised");
 
-        //StartCoroutine(SendDataCoroutine()); // DELETE THIS: Added to show sending data from Unity to Python via UDP
+        //StartCoroutine(SendDataCoroutine()); // Added to show sending data from Unity to Python via UDP
     }
 
     // Receive data, update packets received
@@ -94,7 +96,10 @@ public class UdpSocket : MonoBehaviour
                 byte[] data = client.Receive(ref anyIP);
                 string text = Encoding.UTF8.GetString(data);
 
-                str_text = text.Split(':');                
+                str_text = text.Split(':');
+                idIMU = int.Parse(str_text[0]);
+                receivedQuaternion = StringToQuaternion(str_text[1]);
+                
                 //print(text);
                 ProcessInput(text);
             }
@@ -125,5 +130,16 @@ public class UdpSocket : MonoBehaviour
 
         client.Close();
     }
-       
+
+    public static Quaternion StringToQuaternion(string sQuaternion)
+    {
+        // Split the items
+        string[] sArray = sQuaternion.Split(',');
+        // Store as a Quaternion
+        Quaternion result = new Quaternion(float.Parse(sArray[0]), float.Parse(sArray[1]),
+                                            float.Parse(sArray[2]), float.Parse(sArray[3]));
+
+        return result;
+    }
+
 }
