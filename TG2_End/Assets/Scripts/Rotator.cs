@@ -5,17 +5,19 @@ using UnityEngine;
 
 public class Rotator : MonoBehaviour
 {
-    
+    public Quaternion quat;
 
     void Start()
     {
         Quaternion startQuaternion = transform.rotation;
+        Debug.Log(startQuaternion);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        quat = transform.rotation;
+
         if (Input.GetKey(KeyCode.U))
         {
             
