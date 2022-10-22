@@ -21,8 +21,8 @@ public class GetAllQuat : MonoBehaviour
 
         imu1_offset = new Quaternion(0, 0, 0, 1); 
         imu2_offset = new Quaternion(0, 0, 0, 1);
-        imu3_offset = new Quaternion(0, 0, 0, -1);
-        imu4_offset = new Quaternion(0, 0, 0, -1);
+        imu3_offset = new Quaternion(1, 0, 0, 0);
+        imu4_offset = new Quaternion(1, 0, 0, 0);
 
         Debug.Log(Quaternion.identity);
     }
