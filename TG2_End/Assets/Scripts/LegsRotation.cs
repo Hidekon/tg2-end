@@ -56,7 +56,7 @@ public class LegsRotation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        s_text = udpSocket.str_text;
+        s_text = udpSocket.str_text.Split(':');
 
 
         // Compare the IMU number to each part of the leg.

@@ -987,7 +987,7 @@ MonoBehaviour:
   udp: {fileID: 1749369800}
   imu1: {fileID: 102693270}
   imu2: {fileID: 1311222172}
-  imu3: {fileID: 0}
+  imu3: {fileID: 107560299}
   imu4: {fileID: 1047087506}
   imu1_init: {x: 0, y: 0, z: 0, w: 0}
   imu2_init: {x: 0, y: 0, z: 0, w: 0}
@@ -1500,6 +1500,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1696169536645593728, guid: 14f8d3c6f5a966d498262e81707f3dca, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1696169536645593729, guid: 14f8d3c6f5a966d498262e81707f3dca, type: 3}
       propertyPath: m_Name
       value: Udp Communication
@@ -1560,7 +1564,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 1733584371}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e017d4cfdefae284a9227d1df6fb38f8, type: 3}
   m_Name: 
@@ -1763,7 +1767,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3055828359189368974, guid: 039944e9a5410d14b86ce53a0b5a00c8, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6897416059789765909, guid: 039944e9a5410d14b86ce53a0b5a00c8, type: 3}
       propertyPath: m_RootOrder

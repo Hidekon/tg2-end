@@ -24,9 +24,11 @@ public class UdpSocket : MonoBehaviour
 
     //String Received
     //public static string[] textArray;
-    public string[] str_text;
+    public string str_text;
     public int idIMU;
     public Quaternion receivedQuaternion;
+
+    [Space(10)]
     public Quaternion quat1;
     public Quaternion quat2;
     public Quaternion quat3;
@@ -87,9 +89,10 @@ public class UdpSocket : MonoBehaviour
                 byte[] data = client.Receive(ref anyIP);
                 string text = Encoding.UTF8.GetString(data);
 
-                str_text = text.Split(':');
-                idIMU = int.Parse(str_text[0]);
-                receivedQuaternion = StringToQuaternion(str_text[1]);
+                str_text = text;
+                string[] strSplited = text.Split(':');
+                idIMU = int.Parse(strSplited[0]);
+                receivedQuaternion = StringToQuaternion(strSplited[1]);
                 
                 // Already assign when received.
                 switch (idIMU)
