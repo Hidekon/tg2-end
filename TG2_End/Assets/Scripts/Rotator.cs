@@ -4,17 +4,18 @@ using UnityEngine;
 
 
 public class Rotator : MonoBehaviour
-{
-    
+{    
     public Quaternion quat, prevQuat;
     public float angle = 0.0f;
-    Vector3 overallRotation, oldRotation;
 
+    Quaternion test_quat;
+    
     void Start()
     {
-        Quaternion startQuaternion = transform.rotation;
+        test_quat = transform.rotation;
+        prevQuat = transform.rotation;
         //Debug.Log(startQuaternion);
-        oldRotation = transform.rotation.eulerAngles;
+        
     }
 
     // Update is called once per frame
@@ -24,24 +25,22 @@ public class Rotator : MonoBehaviour
         if (Input.GetKey(KeyCode.U))
         {   
             transform.Rotate(new Vector3(1, 0, 0));
-        }
-        
+        }        
         if (Input.GetKey(KeyCode.Y))
         {
             transform.Rotate(new Vector3(-1, 0, 0));
         }
-
         if (Input.GetKey(KeyCode.M))
         {
-            transform.rotation = new Quaternion(1, 0, 0, 0);                         
+            test_quat = new Quaternion(1, 0, 0, 0);                         
         }
                 
-        Debug.Log(transform.rotation);
-
-        angle += Quaternion.Angle(transform.rotation, prevQuat);
         
-        prevQuat = transform.rotation;
+        Debug.Log(transform.rotation);
+        angle += Quaternion.Angle(transform.rotation, prevQuat);
                 
+        //transform.rotation = Quaternion.Slerp(transform.rotation, test_quat, 0.1f);
+        prevQuat = transform.rotation;
     }
     
 }

@@ -166,7 +166,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 28397008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.17, z: 0}
+  m_LocalPosition: {x: 0, y: 0.713, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1428,7 +1428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ec74de4bb9e6d49a606f0ca4554570, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quat1_test: {x: 1, y: 0, z: 0, w: -0.00000004371139}
+  quat1_test: {x: 0.9915584, y: -0.000000037674734, z: -0.000000037674734, w: 0.12966093}
 --- !u!4 &1011904174
 Transform:
   m_ObjectHideFlags: 0
@@ -1678,7 +1678,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6897416059789765909, guid: 039944e9a5410d14b86ce53a0b5a00c8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 6897416059789765909, guid: 039944e9a5410d14b86ce53a0b5a00c8, type: 3}
       propertyPath: m_LocalRotation.w

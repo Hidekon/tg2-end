@@ -5,17 +5,18 @@ using UnityEngine;
 public class MoveForward : MonoBehaviour
 {
     public Rotator rot;
+    float speed = 0.01f;
        
     void Start()
     {
-        rot = GetComponent<Rotator>();        
+                
     }
 
     // Update is called once per frame
     void Update()
     {
         Debug.Log(rot.angle);
-        //transform.position = new Vector3(transform.position.x, transform.position.y, rot.angle);
+        transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, rot.angle * speed), 0.1f);
         
     }
             

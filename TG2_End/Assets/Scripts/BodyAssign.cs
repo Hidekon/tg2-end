@@ -23,6 +23,10 @@ public class BodyAssign : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            offset = Quaternion.Inverse(rot.quat1_test) * initRot;
+        }
         chest.transform.rotation = rot.quat1_test * offset; 
         
     }
