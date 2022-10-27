@@ -100,7 +100,7 @@ public class LegsRotation : MonoBehaviour
 
             q_RL = StringToQuaternion(s_text[1]);
 
-            r_legTransf.localRotation = Quaternion.Slerp(current, q_RL * quat_RLeg_Offset, Time.deltaTime) ;  //Right Leg
+            r_legTransf.rotation = Quaternion.Slerp(current, q_RL * quat_RLeg_Offset, Time.deltaTime) ;  //Right Leg
 
             
         }

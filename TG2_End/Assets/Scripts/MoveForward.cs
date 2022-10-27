@@ -4,32 +4,57 @@ using UnityEngine;
 
 public class MoveForward : MonoBehaviour
 {
-    public GameObject tip;
-    public Vector3 tipPosition;
-    public float distance;
+    public Transform rLeg;
+    public Transform lLeg;
+    public float speed = 100;
+    public float t = 0.3f;
+    public Transform target;
+    Transform prevTransform;
+    public float totalDistance = 0;
 
-    Vector3 prevTipPosition;
 
-    // Start is called before the first frame update
     void Start()
     {
-        tipPosition = tip.transform.position;
+        target.position = transform.position;
+        prevTransform = rLeg;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(tipPosition);
-        prevTipPosition = tipPosition;
+        if (Input.GetKey(KeyCode.U))
+        {
+            Debug.Log("Key U Pressed");
+            rLeg.Rotate(Vector3.forward * speed * Time.deltaTime);
+        }
 
-        transform.Translate(0, 0, distance * Time.deltaTime);
-        
+        if (Input.GetKey(KeyCode.J))
+        {
+            Debug.Log("Key J Pressed");
+            rLeg.Rotate(Vector3.back * speed * Time.deltaTime);
+        }
+
+        float zDistance = CalculateDistance();
+        Vector3 a = transform.position; 
+        Vector3 b = target.position + new Vector3(0 ,0, 1);
+        Debug.Log(zDistance);
+
+        if (zDistance > 0)
+        {
+            transform.position = Vector3.Lerp(a, b, t) ;
+
+        }
+
+        prevTransform = transform;
     }
 
-    Vector3 CalculateDistance()
+    float CalculateDistance()
     {
-        Vector3 distance = tipPosition - prevTipPosition;
-
-        return distance;
+        Vector3 distanceXYZ = rLeg.rotation.eulerAngles - prevTransform.rotation.eulerAngles;
+        totalDistance = totalDistance + distanceXYZ.z;
+        distanceXYZ = Vector3.zero;
+        Debug.Log(totalDistance);
+        return distanceXYZ.z;
     }
+    
 }
