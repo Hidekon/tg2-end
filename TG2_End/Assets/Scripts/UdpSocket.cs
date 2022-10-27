@@ -95,19 +95,20 @@ public class UdpSocket : MonoBehaviour
                 receivedQuaternion = StringToQuaternion(strSplited[1]);
                 
                 // Already assign when received.
+               
                 switch (idIMU)
                 {
                     case 1:
-                        Quaternion quat1 = receivedQuaternion;
+                        quat1 = receivedQuaternion;
                         break;
                     case 2:
-                        Quaternion quat2 = receivedQuaternion;
+                        quat2 = receivedQuaternion;
                         break;
                     case 3:
-                        Quaternion quat3 = receivedQuaternion;
+                        quat3 = receivedQuaternion;
                         break;
                     case 4:
-                        Quaternion quat4 = receivedQuaternion;
+                        quat4 = receivedQuaternion;
                         break;
 
                 }

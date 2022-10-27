@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BodyAssign : MonoBehaviour
 {
-    public RotateQuat rot;
-    //public UdpSocket udp;
+    //public RotateQuat rot;
+    public UdpSocket udp;
     public GameObject chest;
 
     Quaternion initRot;
@@ -15,7 +15,7 @@ public class BodyAssign : MonoBehaviour
     {
         initRot = chest.transform.rotation;
         Debug.Log(initRot);
-        offset = Quaternion.Inverse(rot.quat1_test) * initRot;
+        offset = Quaternion.Inverse(udp.quat1) * initRot;
         Debug.Log(offset);
 
     }
@@ -25,9 +25,10 @@ public class BodyAssign : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            offset = Quaternion.Inverse(rot.quat1_test) * initRot;
+            offset = Quaternion.Inverse(udp.quat1) * initRot;
         }
-        chest.transform.rotation = rot.quat1_test * offset; 
+        
+        chest.transform.rotation = udp.quat1 * offset; 
         
     }
 }
