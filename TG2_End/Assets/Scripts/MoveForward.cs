@@ -15,7 +15,7 @@ public class MoveForward : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(rot.angle);
+        //Debug.Log(rot.angle);
         transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, rot.angle * speed), 0.1f);
         
     }
