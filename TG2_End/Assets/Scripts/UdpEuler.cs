@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using System.Collections;
 using System;
@@ -7,7 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-public class UdpSocket : MonoBehaviour
+public class UdpEuler : MonoBehaviour
 {
     [HideInInspector] public bool isTxStarted = false;
 
@@ -15,8 +14,7 @@ public class UdpSocket : MonoBehaviour
     int rxPort = 8000; // port to receive data from Python on
     int txPort = 8001; // port to send data to Python on
 
-    int i = 0; // DELETE THIS: Added to show sending data from Unity to Python via UDP
-
+    
     // Create necessary UdpClient objects
     UdpClient client;
     IPEndPoint remoteEndPoint;
@@ -24,24 +22,16 @@ public class UdpSocket : MonoBehaviour
 
     //String Received
     //public static string[] textArray;
-    public string str_text;
-    public int idIMU;
-    public Vector3 receivedEuler;
-    public Quaternion receivedQuaternion;
-
-    [Space(10)]
-    public Quaternion quat1;
-    public Quaternion quat2;
-    public Quaternion quat3;
-    public Quaternion quat4;
-
-
+    public bool ascending = true;
+    public float y_data;
+    public int steps= 0;
+        
     IEnumerator SendDataCoroutine() //  Added to show sending data from Unity to Python via UDP
     {
         while (true)
         {
-            SendData("Sent from Unity: " + i.ToString());
-            i++;
+            SendData("Sent from Unity: " + y_data);
+            
             yield return new WaitForSeconds(1f);
         }
     }
@@ -90,34 +80,26 @@ public class UdpSocket : MonoBehaviour
                 byte[] data = client.Receive(ref anyIP);
                 string text = Encoding.UTF8.GetString(data);
 
-                str_text = text;
-                string[] strSplited = text.Split(':');
-                idIMU = int.Parse(strSplited[0]);
-                receivedEuler = StringToEuler(strSplited[1]);
+                y_data = float.Parse(text);
+                //Debug.Log(y_data);
+
+                // Calculating number of steps
+                                
                 
+                if (y_data > 0 && ascending == false)
+                {
+                    ascending = true;
+                    steps++;
+                }
+                if (y_data < 0 && ascending == true)
+                {
+                    ascending = false;
+                    steps++;
+                }
+
+
+                // Calculating Velocity
                 
-
-                //receivedQuaternion = StringToQuaternion(strSplited[1]);
-               
-                //switch (idIMU)
-                //{
-                //    case 1:
-                //        quat1 = receivedQuaternion;
-                //        break;
-                //    case 2:
-                //        quat2 = receivedQuaternion;
-                //        break;
-                //    case 3:
-                //        quat3 = receivedQuaternion;
-                //        break;
-                //    case 4:
-                //        quat4 = receivedQuaternion;
-                //        break;
-                //}
-
-                
-
-
                 //print(text);
                 ProcessInput(text);
             }
@@ -149,29 +131,11 @@ public class UdpSocket : MonoBehaviour
         client.Close();
     }
 
-    public static Quaternion StringToQuaternion(string sQuaternion)
+    private float CalculateVelocity(float angleY)
     {
-        // Split the items
-        string[] sArray = sQuaternion.Split(',');
-        // Store as a Quaternion
-        Quaternion result = new Quaternion(float.Parse(sArray[0]), float.Parse(sArray[1]),
-                                            float.Parse(sArray[2]), float.Parse(sArray[3]));
+        
 
-        return result;
     }
-
-    
-
-    public static Vector3 StringToEuler(string sEuler)
-    {
-        // Split the items
-        string[] sArray = sEuler.Split(',');
-        // Store as a Quaternion
-        Vector3 result = new Vector3(float.Parse(sArray[0]), float.Parse(sArray[1]),
-                                            float.Parse(sArray[2]));
-
-        return result;
-    }
-
+      
 
 }

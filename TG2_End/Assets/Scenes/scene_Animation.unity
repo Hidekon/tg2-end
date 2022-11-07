@@ -234,14 +234,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 102693265}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 616fd4faa9d27604f99d70929f036fda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quat: {x: 0, y: 0, z: 0, w: 0}
   prevQuat: {x: 0, y: 0, z: 0, w: 0}
   angle: 0
+  speed: 1
 --- !u!4 &145826041 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7581562690896964048, guid: cebd97931fa2b0745b238a28a0916ac7, type: 3}
@@ -1207,6 +1207,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cebd97931fa2b0745b238a28a0916ac7, type: 3}
+--- !u!1 &1957039396434308952
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1957039396434308958}
+  - component: {fileID: 1957039396434308959}
+  m_Layer: 0
+  m_Name: Udp Communication
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1957039396434308958
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957039396434308952}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1957039396434308959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957039396434308952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 855c22f0b197a3141854ea8a5a0147c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTxStarted: 0
+  IP: 127.0.0.1
+  y_data: 0
 --- !u!4 &3349128042017891154 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7581562690896964048, guid: cebd97931fa2b0745b238a28a0916ac7, type: 3}

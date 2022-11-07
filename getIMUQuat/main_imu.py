@@ -19,7 +19,7 @@ imu_configuration = {
     "filterMode": 1,
     "tareSensor": True,
     "logical_ids": [1, 2, 3, 4, 5],
-    "streaming_commands": [0, 255, 255, 255, 255, 255, 255, 255]
+    "streaming_commands": [1, 255, 255, 255, 255, 255, 255, 255]
 }
 serial_port = serial_op.initialize_imu(imu_configuration)
 
@@ -43,12 +43,19 @@ while True:
             data = serial_port.read(bytes_to_read)
             if data[0] != 0:
                 continue
+            # euler_data = serial_op.extract_euler_angles(data)
+            # str_euler_data = f"{euler_data[0]:.4f},{euler_data[1]:.4f},{euler_data[2]:.4f}"
+            # print(f"IMU{data[1]:}" + str_euler_data)
 
-            quat_data = serial_op.extract_quaternions(data)
-            str_quat_data = f"{quat_data[0]:.4f},{quat_data[1]:.4f},{quat_data[2]:.4f},{quat_data[3]:.4f}"
-            print(f"IMU{data[1]}:" + str_quat_data)
+            
+            euler_data = serial_op.extract_quaternions(data)
+            y_data = round(euler_data[1] * 180 / 3.14) 
 
-            sock.SendData(str(data[1])+':'+str_quat_data)
+            str_euler_data = f"{euler_data[0]:.4f},{euler_data[1]:.4f},{euler_data[2]:.4f}"
+            
+            print(f"IMU{data[1]}:" + str(y_data))
+
+            sock.SendData(str(y_data))
 
     except KeyboardInterrupt:
         print(GREEN, "Keyboard excpetion occured.", RESET)

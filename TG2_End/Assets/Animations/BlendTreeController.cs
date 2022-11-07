@@ -37,7 +37,7 @@ public class BlendTreeController : MonoBehaviour
             velocity = 0.0f;
         }
 
-
+        
         animator.SetFloat(VelocityHash, velocity);
     }
 }
