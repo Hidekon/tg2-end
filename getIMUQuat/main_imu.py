@@ -23,7 +23,6 @@ imu_configuration = {
 }
 serial_port = serial_op.initialize_imu(imu_configuration)
 
-prev_quaternion = np.zeros(4)
 
 while True:
     try:
