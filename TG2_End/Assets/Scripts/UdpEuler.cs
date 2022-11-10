@@ -22,32 +22,13 @@ public class UdpEuler : MonoBehaviour
 
     //String Received
     //public static string[] textArray;
-    public bool ascending = true;
-    public float y_data;
-    public int steps= 0;
-        
-    IEnumerator SendDataCoroutine() //  Added to show sending data from Unity to Python via UDP
-    {
-        while (true)
-        {
-            SendData("Sent from Unity: " + y_data);
-            
-            yield return new WaitForSeconds(1f);
-        }
-    }
-
-    public void SendData(string message) // Use to send data to Python
-    {
-        try
-        {
-            byte[] data = Encoding.UTF8.GetBytes(message);
-            client.Send(data, data.Length, remoteEndPoint);
-        }
-        catch (Exception err)
-        {
-            print(err.ToString());
-        }
-    }
+    [SerializeField] private float y_data;
+    [SerializeField] private int steps= 0;
+    [SerializeField] private float timer = 0.0f;
+    [SerializeField] private bool ascending = true;
+    public float velocity = 0.0f;
+    private bool timerStart = false;
+    private float prevTime = 0.0f;
 
     void Awake()
     {
@@ -67,7 +48,25 @@ public class UdpEuler : MonoBehaviour
         print("UDP Comms Initialised");
 
         //StartCoroutine(SendDataCoroutine()); // Added to show sending data from Unity to Python via UDP
+
+        
     }
+
+    private void Update()
+    {
+        
+        // Timer Starts on Enter. 
+        if (Input.GetKey(KeyCode.KeypadEnter)){
+            timerStart = true;
+        }
+        if (timerStart == true)
+        {
+            timer += Time.deltaTime;
+        }
+                
+
+    }
+
 
     // Receive data, update packets received
     private void ReceiveData()
@@ -79,26 +78,32 @@ public class UdpEuler : MonoBehaviour
                 IPEndPoint anyIP = new IPEndPoint(IPAddress.Any, 0);
                 byte[] data = client.Receive(ref anyIP);
                 string text = Encoding.UTF8.GetString(data);
-
+                
                 y_data = float.Parse(text);
                 //Debug.Log(y_data);
 
-                // Calculating number of steps
-                                
+                // Calculating number of steps     
                 
                 if (y_data > 0 && ascending == false)
                 {
                     ascending = true;
                     steps++;
+
+                    //float period = timer - prevTime;
+                    //prevTime = timer;
+                    //Debug.Log(period);
                 }
                 if (y_data < 0 && ascending == true)
-                {
+                {                    
                     ascending = false;
                     steps++;
+
+                    float period = timer - prevTime;
+                    velocity = (1 / period);
+                    prevTime = timer;
+                    Debug.Log(period);
                 }
 
-
-                // Calculating Velocity
                 
                 //print(text);
                 ProcessInput(text);
@@ -130,12 +135,30 @@ public class UdpEuler : MonoBehaviour
 
         client.Close();
     }
-
-    private float CalculateVelocity()
-    {
-        float velocity = 0.0f;
         
-        return velocity;
+
+    IEnumerator SendDataCoroutine() //  Added to show sending data from Unity to Python via UDP
+    {
+        while (true)
+        {
+            SendData("Sent from Unity: " + y_data);
+
+            yield return new WaitForSeconds(1f);
+        }
     }
+
+    public void SendData(string message) // Use to send data to Python
+    {
+        try
+        {
+            byte[] data = Encoding.UTF8.GetBytes(message);
+            client.Send(data, data.Length, remoteEndPoint);
+        }
+        catch (Exception err)
+        {
+            print(err.ToString());
+        }
+    }
+
 
 }
