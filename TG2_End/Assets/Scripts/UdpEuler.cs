@@ -131,11 +131,11 @@ public class UdpEuler : MonoBehaviour
         client.Close();
     }
 
-    private float CalculateVelocity(float angleY)
+    private float CalculateVelocity()
     {
+        float velocity = 0.0f;
         
-
+        return velocity;
     }
-      
 
 }
