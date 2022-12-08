@@ -30,11 +30,7 @@ while True:
 
         if data != None:
             print(data)
-
-            if data == "c":
-                print("Received data from Unity ")
-
-                data = None
+           
 
         bytes_to_read = serial_port.inWaiting()
 
@@ -55,7 +51,7 @@ while True:
 
             str_euler_data = f"{euler_data[0]:.4f},{euler_data[1]:.4f},{euler_data[2]:.4f}"
 
-            print(f"IMU{data[1]}:" + str(y_data))
+            # print(f"IMU{data[1]}:" + str(y_data))
             
             sock.SendData(str(y_data))
             prev_angle = y_data
