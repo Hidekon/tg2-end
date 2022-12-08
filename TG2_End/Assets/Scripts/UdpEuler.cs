@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Net;
@@ -13,8 +14,7 @@ public class UdpEuler : MonoBehaviour
     [SerializeField] string IP = "127.0.0.1"; // local host
     int rxPort = 8000; // port to receive data from Python on
     int txPort = 8001; // port to send data to Python on
-
-    
+        
     // Create necessary UdpClient objects
     UdpClient client;
     IPEndPoint remoteEndPoint;
@@ -22,13 +22,17 @@ public class UdpEuler : MonoBehaviour
 
     //String Received
     //public static string[] textArray;
-    [SerializeField] private float y_data;
-    [SerializeField] private int steps= 0;
-    [SerializeField] private float timer = 0.0f;
-    [SerializeField] private bool ascending = true;
-    public float velocity = 0.0f;
-    private bool timerStart = false;
-    private float prevTime = 0.0f;
+    public float  y_data;
+    [SerializeField] private int    steps = 0;
+    [SerializeField] private float  timer = 0.0f;
+    [SerializeField] private bool   ascending = true;
+    
+    public  float   velocity = 0.0f;
+    public  float   velocityConstant = 3.3f;
+    private bool    timerStart = false;
+    private float   prevTime = 0.0f;
+    List<float> velocityList = new List<float>();
+    
 
     void Awake()
     {
@@ -47,23 +51,45 @@ public class UdpEuler : MonoBehaviour
         // Initialize (seen in comments window)
         print("UDP Comms Initialised");
 
-        //StartCoroutine(SendDataCoroutine()); // Added to show sending data from Unity to Python via UDP
-
         
     }
 
     private void Update()
     {
-        
+        // Calculating number of steps                
+        if (y_data > 0 && ascending == false)
+        {
+            ascending = true;
+            steps++;
+
+        }
+        if (y_data < 0 && ascending == true)
+        {
+            ascending = false;
+            steps++;
+
+            // Calculating period between steps
+            float period = timer - prevTime;
+            //Debug.Log(period);
+            velocity = velocityConstant * (1 / period);
+
+
+            prevTime = timer;
+            
+        }
+
+
         // Timer Starts on Enter. 
         if (Input.GetKey(KeyCode.KeypadEnter)){
+            StartCoroutine(SendDataCoroutine()); // Added to show sending data from Unity to Python via UDP
+
             timerStart = true;
         }
         if (timerStart == true)
         {
             timer += Time.deltaTime;
         }
-                
+                 
 
     }
 
@@ -77,35 +103,10 @@ public class UdpEuler : MonoBehaviour
             {
                 IPEndPoint anyIP = new IPEndPoint(IPAddress.Any, 0);
                 byte[] data = client.Receive(ref anyIP);
-                string text = Encoding.UTF8.GetString(data);
-                
-                y_data = float.Parse(text);
+                string text = Encoding.UTF8.GetString(data);                                          
+                y_data = float.Parse(text); // Getting the y value in angles
                 //Debug.Log(y_data);
-
-                // Calculating number of steps     
-                
-                if (y_data > 0 && ascending == false)
-                {
-                    ascending = true;
-                    steps++;
-
-                    //float period = timer - prevTime;
-                    //prevTime = timer;
-                    //Debug.Log(period);
-                }
-                if (y_data < 0 && ascending == true)
-                {                    
-                    ascending = false;
-                    steps++;
-
-                    float period = timer - prevTime;
-                    velocity = (1 / period);
-                    prevTime = timer;
-                    Debug.Log(period);
-                }
-
-                
-                //print(text);
+                          
                 ProcessInput(text);
             }
             catch (Exception err)
@@ -114,8 +115,6 @@ public class UdpEuler : MonoBehaviour
             }
         }
     }
-
-
 
     private void ProcessInput(string input)
     {
@@ -127,8 +126,8 @@ public class UdpEuler : MonoBehaviour
         }
     }
 
-    //Prevent crashes - close clients and threads properly!
-    void OnDisable()
+    
+    void OnDisable()  //Prevent crashes - close clients and threads properly!
     {
         if (receiveThread != null)
             receiveThread.Abort();

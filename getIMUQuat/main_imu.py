@@ -6,7 +6,7 @@ import traceback
 import serial_operations as serial_op
 from colors import *
 import UdpComms as U
-
+import matplotlib as plt
 
 # Create UDP socket to use for sending (and receiving)
 sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
@@ -18,16 +18,15 @@ imu_configuration = {
     "gyroAutoCalib": True,
     "filterMode": 1,
     "tareSensor": True,
-    "logical_ids": [1, 2, 3, 4, 5],
+    "logical_ids": [1, 2, 3],
     "streaming_commands": [1, 255, 255, 255, 255, 255, 255, 255]
 }
 serial_port = serial_op.initialize_imu(imu_configuration)
 
-
 while True:
     try:
-        #Calibrate sensor from Unity
         data = sock.ReadReceivedData()
+
         if data != None:
             print(data)
 
@@ -47,12 +46,11 @@ while True:
             # str_euler_data = f"{euler_data[0]:.4f},{euler_data[1]:.4f},{euler_data[2]:.4f}"
             # print(f"IMU{data[1]:}" + str_euler_data)
 
-            
-            euler_data = serial_op.extract_quaternions(data)
-            y_data = round(euler_data[1] * 180 / 3.14) 
+            euler_data = serial_op.extract_eulers(data)
+            y_data = round(euler_data[1] * 180 / 3.14)
 
             str_euler_data = f"{euler_data[0]:.4f},{euler_data[1]:.4f},{euler_data[2]:.4f}"
-            
+
             print(f"IMU{data[1]}:" + str(y_data))
 
             sock.SendData(str(y_data))
@@ -66,7 +64,7 @@ while True:
         print(RED, "Unexpected exception occured.", RESET)
         print(traceback.format_exc())
         print(GREEN, "Stop streaming.", RESET)
-        serial_port = serial_op.stop_streaming(serial_port, 
+        serial_port = serial_op.stop_streaming(serial_port,
                                                imu_configuration['logical_ids'])
         break
 

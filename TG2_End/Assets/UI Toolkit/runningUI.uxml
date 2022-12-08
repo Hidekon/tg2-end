@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="width: 40%; height: 100%; flex-direction: column; flex-grow: 0; margin-left: 0; margin-right: 0; background-color: rgba(0, 0, 0, 0.6); justify-content: flex-start;">
+        <ui:Button text="START" display-tooltip-when-elided="true" style="translate: 0 80px; width: auto; align-items: stretch; flex-shrink: 0; scale: 1 1;" />
+    </ui:VisualElement>
+</ui:UXML>

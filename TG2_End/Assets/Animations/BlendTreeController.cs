@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BlendTreeController : MonoBehaviour
 {
+    public UdpEuler udp;
     Animator animator;
     float velocity = 0.0f;
     public float acceleration = 0.1f;
@@ -36,8 +37,7 @@ public class BlendTreeController : MonoBehaviour
         {
             velocity = 0.0f;
         }
-
-        
-        animator.SetFloat(VelocityHash, velocity);
+        Debug.Log(udp.velocity);      
+        animator.SetFloat(VelocityHash, udp.velocity);
     }
 }

@@ -255,9 +255,9 @@ def extract_euler_angles(data):
     cleaned_list_data = list(filter(None, list_data))
     euler_vector = cleaned_list_data[0][3:].split(',')
     euler_vector = np.array(euler_vector, dtype=np.float64)
-    return {'euler_vector': euler_vector}
+    return {euler_vector}
 
-def extract_quaternions(data):
+def extract_eulers(data):
     """ Manipulate data to obtain rotation matrix
     
     Args:
