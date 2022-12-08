@@ -26,12 +26,13 @@ public class UdpEuler : MonoBehaviour
     [SerializeField] private int    steps = 0;
     [SerializeField] private float  timer = 0.0f;
     [SerializeField] private bool   ascending = true;
+    [SerializeField] private float  velocityConstant = 3.3f;
+    [SerializeField] private float  media = 0;
     
     public  float   velocity = 0.0f;
-    public  float   velocityConstant = 3.3f;
     private bool    timerStart = false;
     private float   prevTime = 0.0f;
-    List<float> velocityList = new List<float>();
+    // List<float> velocityList = new List<float>();
     
 
     void Awake()
@@ -70,8 +71,14 @@ public class UdpEuler : MonoBehaviour
 
             // Calculating period between steps
             float period = timer - prevTime;
+            if (period > 3)
+            {
+                velocity = 0;
+            } 
+            else {
+                velocity = velocityConstant * (1 / period);
+            }
             //Debug.Log(period);
-            velocity = velocityConstant * (1 / period);
 
 
             prevTime = timer;
@@ -140,7 +147,7 @@ public class UdpEuler : MonoBehaviour
     {
         while (true)
         {
-            SendData("Sent from Unity: " + y_data);
+            SendData("Sent from Unity: " + velocity + " , " + y_data);
 
             yield return new WaitForSeconds(1f);
         }

@@ -1,4 +1,4 @@
-"""Getting IMU Quaternions
+"""Getting IMU Angles
 
 """
 import numpy as np
@@ -22,6 +22,7 @@ imu_configuration = {
     "streaming_commands": [1, 255, 255, 255, 255, 255, 255, 255]
 }
 serial_port = serial_op.initialize_imu(imu_configuration)
+prev_angle = 0
 
 while True:
     try:
@@ -48,12 +49,16 @@ while True:
 
             euler_data = serial_op.extract_eulers(data)
             y_data = round(euler_data[1] * 180 / 3.14)
+            # check for 0 error values
+            if y_data == 0:
+                y_data = prev_angle
 
             str_euler_data = f"{euler_data[0]:.4f},{euler_data[1]:.4f},{euler_data[2]:.4f}"
 
             print(f"IMU{data[1]}:" + str(y_data))
-
+            
             sock.SendData(str(y_data))
+            prev_angle = y_data
 
     except KeyboardInterrupt:
         print(GREEN, "Keyboard excpetion occured.", RESET)
