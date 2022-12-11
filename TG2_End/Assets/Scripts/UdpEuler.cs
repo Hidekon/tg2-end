@@ -162,7 +162,7 @@ public class UdpEuler : MonoBehaviour
     {
         while (true)
         {
-            SendData("Timer:" + timer + "Velocity:"+ velocity + "Y Angle:" + y_data);
+            SendData(timer + ":" + velocity + ":" + y_data);
 
             yield return new WaitForSeconds(0.1f);
         }

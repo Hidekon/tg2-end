@@ -8,6 +8,7 @@ from colors import *
 import UdpComms as U
 import matplotlib as plt
 
+
 # Create UDP socket to use for sending (and receiving)
 sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
 # Set parameters that will be configured
@@ -23,14 +24,29 @@ imu_configuration = {
 }
 serial_port = serial_op.initialize_imu(imu_configuration)
 prev_angle = 0
+count_value = 0
 
 while True:
     try:
         data = sock.ReadReceivedData()
 
         if data != None:
-            print(data)
-           
+            #print(data)
+            #print(type(data))
+            data_splited = data.split(':')
+            timer = data_splited[0]
+            velocity = data_splited[1]
+            y_data = data_splited[2]
+
+            print(f"Timer: {timer} Velocity: {velocity} Y Angle: {y_data}")
+
+            # while count_value == 1000:
+            #     serial_op.print_graph(data_splited[0],data_splited[2])
+
+
+            count_value += 1
+
+
 
         bytes_to_read = serial_port.inWaiting()
 
@@ -52,7 +68,7 @@ while True:
             str_euler_data = f"{euler_data[0]:.4f},{euler_data[1]:.4f},{euler_data[2]:.4f}"
 
             # print(f"IMU{data[1]}:" + str(y_data))
-            
+
             sock.SendData(str(y_data))
             prev_angle = y_data
 
@@ -68,6 +84,8 @@ while True:
         serial_port = serial_op.stop_streaming(serial_port,
                                                imu_configuration['logical_ids'])
         break
+
+
 
 # def filter(q):
 #     mf_window.pop(0)
