@@ -1,16 +1,10 @@
 import serial.tools.list_ports
 import time
 import numpy as np
-import matplotlib.pyplot as plt
 
 #from colors import *
 
 SMALL_IMU_DONGLE_PORT = 4128
-
-def print_graph(time, angle):
-    plt.plot(time, angle)
-    plt.show
-
 
 # If permission denied error occurs in Linux try:
 # sudo chmod 666 /dev/ttyACM0 -> with the correspondent COM port

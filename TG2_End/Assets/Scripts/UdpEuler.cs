@@ -26,16 +26,15 @@ public class UdpEuler : MonoBehaviour
     [SerializeField] private int    steps = 0;
     [SerializeField] private float  timer = 0.0f;
     [SerializeField] private bool   ascending = true;
-    [SerializeField] private float  velocityConstant = 3.3f;
+    [SerializeField] private float  velocityConstant = 3.0f;
     [SerializeField] private float  media = 0;
     
     public  float   velocity = 0.0f;
-    private bool    startTimer = false;
+    public  float   velocityMedia = 0.0f;
     private float   prevTime = 0.0f;
     private float   minY, maxY = 0.0f;
-    // List<float> velocityList = new List<float>();
+    List<float> velocityList = new List<float>();
     
-
     void Awake()
     {
         // Create remote endpoint  
@@ -69,40 +68,45 @@ public class UdpEuler : MonoBehaviour
         {
             maxY = y_data;
         }
-
         media = (minY + maxY) / 2; // Calculating Media
 
+        
         if (y_data > media && ascending == false)   // Calculating number of steps
         {
             ascending = true;
             steps++;
+            velocity = SetVelocity(timer, prevTime, velocityConstant);
+            velocityList.Add(velocity);
+            prevTime = timer;
         }
         if (y_data < media && ascending == true)
         {
             ascending = false;
-            steps++;
-                        
-            float period = timer - prevTime;    // Calculating period between steps
-            if (period > 5)
-            {
-                velocity = 0;
-            } 
-            else {
-                velocity = velocityConstant * (1 / period);
-            }
-            //Debug.Log(period);
-
+            steps++;            
+            velocity = SetVelocity(timer, prevTime, velocityConstant);
+            velocityList.Add(velocity);
             prevTime = timer;
             
         }
 
+        if (velocityList.Count == 6)
+        {
+            float sum = 0f;
+            foreach(float x in velocityList)
+            {
+                sum = sum + x;
+            }
+            velocityMedia = (sum / 6);
+            velocityList.RemoveAt(0);
+        }
+            
 
         // Timer Starts on Enter. 
         if (Input.GetKey(KeyCode.KeypadEnter))
         {
+            timer = 0f;
             Debug.Log("Timer Started");
             StartCoroutine(SendDataCoroutine()); // Added to show sending data from Unity to Python via UDP
-            timer = 0f;
         }
                  
 
@@ -114,15 +118,26 @@ public class UdpEuler : MonoBehaviour
         {
             SendData(timer.ToString("F2") + ":" + velocity.ToString("F3") + ":" + y_data.ToString("F1"));
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
     }
 
     
-    private float CalculateMedia(float minY, float maxY)
+    private float SetVelocity(float timer, float prevTime, float velocityConst)
     {
-        float media = (maxY - minY) / 2;
-        return media;
+        // Calculating period between steps
+        velocity = velocityConst * (1 / (timer - prevTime));
+
+        if (velocity < 0.8f)
+        {
+            velocity = 0.0f;
+        }
+        if (velocity > 6.0f)
+        {
+            velocity = 6.0f;
+        }
+
+        return velocity;
     }
 
 

@@ -37,35 +37,29 @@ while True:
             #print(data)
             #print(type(data))
 
-            
-            data_splited = data.split(':')
+            data_splited = (data.replace(",",".")).split(':')
+
             timer.append(float(data_splited[0]))
             velocity.append(float(data_splited[1]))
             angle.append(float(data_splited[2]))
 
-            #print(f"Timer: {timer} Velocity: {velocity} Y Angle: {y_data}")
-            # timer_array[count_value] = timer
-            # velocity_array[count_value] = velocity
-            # ydata_array[count_value] = y_data
+            print(f"Count: {count_value} Timer: {timer[count_value]} Velocity: {velocity[count_value]} Y Angle: {angle[count_value]}")
 
             count_value += 1
-            print(count_value)
 
-        if count_value == 100:
-            # serial_op.print_graph(timer_array, ydata_array)
-            print( "DONEEEEEEEEEEEEEEEEEEEEEE 100 Times ")
+        if count_value == 1500:
+            print( "Plotting Graph ")
 
-            # matplotlib stuff
-            #fig = plt.subplots(figsize=(12,8))
-            fig = plt.figure(figsize=(12,8))
-            plt.plot(angle)
+            fig, ax = plt.subplots()
+            ax.plot(timer, angle, color="red", marker="o")
+            ax.set_xlabel("Time", fontsize=14)
+            ax.set_ylabel("Angle", color="red", fontsize=14)
+            ax2 = ax.twinx()
+            ax2.plot(timer, velocity, color="blue", marker="o")
+            ax2.set_ylabel("Velocity", color="blue", fontsize=14)
             plt.title('Angle by time')
-            plt.xlabel('Time')
-            plt.ylabel('Angle')
-            plt.savefig('./angle_plot.png', format='png')
             plt.show()
-
-
+            fig.savefig('./angle_vel_time.jpg', format='jpeg', dpi=100, bbox_inches='tight')
             timer, velocity, angle = [], [], []
             count_value = 0
 
