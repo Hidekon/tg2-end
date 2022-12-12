@@ -39,9 +39,9 @@ while True:
 
             
             data_splited = data.split(':')
-            timer.append(data_splited[0])
-            velocity.append(data_splited[1])
-            angle.append(data_splited[2])
+            timer.append(float(data_splited[0]))
+            velocity.append(float(data_splited[1]))
+            angle.append(float(data_splited[2]))
 
             #print(f"Timer: {timer} Velocity: {velocity} Y Angle: {y_data}")
             # timer_array[count_value] = timer
@@ -51,7 +51,7 @@ while True:
             count_value += 1
             print(count_value)
 
-        if count_value == 1000:
+        if count_value == 100:
             # serial_op.print_graph(timer_array, ydata_array)
             print( "DONEEEEEEEEEEEEEEEEEEEEEE 100 Times ")
 

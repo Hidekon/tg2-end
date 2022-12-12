@@ -108,6 +108,16 @@ public class UdpEuler : MonoBehaviour
 
     }
 
+    IEnumerator SendDataCoroutine() //  Added to show sending data from Unity to Python via UDP
+    {
+        while (true)
+        {
+            SendData(timer.ToString("F2") + ":" + velocity.ToString("F3") + ":" + y_data.ToString("F1"));
+
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
     
     private float CalculateMedia(float minY, float maxY)
     {
@@ -157,16 +167,6 @@ public class UdpEuler : MonoBehaviour
         client.Close();
     }
         
-
-    IEnumerator SendDataCoroutine() //  Added to show sending data from Unity to Python via UDP
-    {
-        while (true)
-        {
-            SendData(timer + ":" + velocity + ":" + y_data);
-
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
 
     public void SendData(string message) // Use to send data to Python
     {
