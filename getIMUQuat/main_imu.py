@@ -1,12 +1,13 @@
 """Getting IMU Angles
 
 """
+
 import numpy as np
 import traceback
 import serial_operations as serial_op
 from colors import *
 import UdpComms as U
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 
 # Create UDP socket to use for sending (and receiving)
@@ -22,9 +23,11 @@ imu_configuration = {
     "logical_ids": [1, 2, 3],
     "streaming_commands": [1, 255, 255, 255, 255, 255, 255, 255]
 }
-serial_port = serial_op.initialize_imu(imu_configuration)
 prev_angle = 0
 count_value = 0
+timer, velocity, angle = [], [], []
+
+serial_port = serial_op.initialize_imu(imu_configuration)
 
 while True:
     try:
@@ -33,20 +36,38 @@ while True:
         if data != None:
             #print(data)
             #print(type(data))
+
+            
             data_splited = data.split(':')
-            timer = data_splited[0]
-            velocity = data_splited[1]
-            y_data = data_splited[2]
+            timer.append(data_splited[0])
+            velocity.append(data_splited[1])
+            angle.append(data_splited[2])
 
-            print(f"Timer: {timer} Velocity: {velocity} Y Angle: {y_data}")
-
-            # while count_value == 1000:
-            #     serial_op.print_graph(data_splited[0],data_splited[2])
-
+            #print(f"Timer: {timer} Velocity: {velocity} Y Angle: {y_data}")
+            # timer_array[count_value] = timer
+            # velocity_array[count_value] = velocity
+            # ydata_array[count_value] = y_data
 
             count_value += 1
+            print(count_value)
+
+        if count_value == 1000:
+            # serial_op.print_graph(timer_array, ydata_array)
+            print( "DONEEEEEEEEEEEEEEEEEEEEEE 100 Times ")
+
+            # matplotlib stuff
+            #fig = plt.subplots(figsize=(12,8))
+            fig = plt.figure(figsize=(12,8))
+            plt.plot(angle)
+            plt.title('Angle by time')
+            plt.xlabel('Time')
+            plt.ylabel('Angle')
+            plt.savefig('./angle_plot.png', format='png')
+            plt.show()
 
 
+            timer, velocity, angle = [], [], []
+            count_value = 0
 
         bytes_to_read = serial_port.inWaiting()
 
