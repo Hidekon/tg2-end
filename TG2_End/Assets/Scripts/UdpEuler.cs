@@ -26,12 +26,13 @@ public class UdpEuler : MonoBehaviour
     [SerializeField] private int    steps = 0;
     [SerializeField] private float  timer = 0.0f;
     [SerializeField] private bool   ascending = true;
-    [SerializeField] private float  velocityConstant = 3.0f;
     [SerializeField] private float  media = 0;
     
     public  float   velocity = 0.0f;
     public  float   velocityMedia = 0.0f;
     private float   prevTime = 0.0f;
+    private float   sum  = 0.0f;
+
     private float   minY, maxY = 0.0f;
     List<float> velocityList = new List<float>();
     
@@ -75,31 +76,40 @@ public class UdpEuler : MonoBehaviour
         {
             ascending = true;
             steps++;
-            velocity = SetVelocity(timer, prevTime, velocityConstant);
+            velocity = SetVelocity(timer, prevTime);
             velocityList.Add(velocity);
-            prevTime = timer;
-        }
-        if (y_data < media && ascending == true)
-        {
-            ascending = false;
-            steps++;            
-            velocity = SetVelocity(timer, prevTime, velocityConstant);
-            velocityList.Add(velocity);
-            prevTime = timer;
-            
-        }
-
-        if (velocityList.Count == 6)
-        {
-            float sum = 0f;
-            foreach(float x in velocityList)
+            foreach (float x in velocityList)
             {
                 sum = sum + x;
             }
-            velocityMedia = (sum / 6);
-            velocityList.RemoveAt(0);
-        }
+            velocityMedia = sum;
             
+            if (velocityList.Count == 10)
+            {
+                velocityList.RemoveAt(0);
+            }
+            prevTime = timer;
+        }
+
+        if (y_data < media && ascending == true)
+        {
+            ascending = false;
+            steps++;
+            velocity = SetVelocity(timer, prevTime);
+            velocityList.Add(velocity);
+            foreach (float x in velocityList)
+            {
+                sum = sum + x;
+            }
+            velocityMedia = sum;
+
+            if (velocityList.Count == 10)
+            {
+                velocityList.RemoveAt(0);
+            }
+
+        }
+
 
         // Timer Starts on Enter. 
         if (Input.GetKey(KeyCode.KeypadEnter))
@@ -123,18 +133,22 @@ public class UdpEuler : MonoBehaviour
     }
 
     
-    private float SetVelocity(float timer, float prevTime, float velocityConst)
+    private float SetVelocity(float timer, float prevTime)
     {
         // Calculating period between steps
-        velocity = velocityConst * (1 / (timer - prevTime));
+        velocity = (0.1392857f * (1 / (timer - prevTime))) + 0.285371f;
 
-        if (velocity < 0.8f)
+        if (velocity < 0.5f)
         {
             velocity = 0.0f;
         }
-        if (velocity > 6.0f)
+        if (velocity > 100.0f)
         {
-            velocity = 6.0f;
+            velocity = 0.0f;            
+        }
+        if (velocity > 20f)
+        {
+            velocity = 10f;
         }
 
         return velocity;
