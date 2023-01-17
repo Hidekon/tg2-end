@@ -78,14 +78,18 @@ public class UdpEuler : MonoBehaviour
             steps++;
             velocity = SetVelocity(timer, prevTime);
             velocityList.Add(velocity);
-            foreach (float x in velocityList)
-            {
-                sum = sum + x;
-            }
-            velocityMedia = sum;
+
             
             if (velocityList.Count == 10)
             {
+                foreach (float x in velocityList)
+                {
+                    sum = sum + x;
+                }
+                velocityMedia = sum / 10;
+                
+                sum = 0;
+
                 velocityList.RemoveAt(0);
             }
             prevTime = timer;
@@ -95,18 +99,18 @@ public class UdpEuler : MonoBehaviour
         {
             ascending = false;
             steps++;
-            velocity = SetVelocity(timer, prevTime);
-            velocityList.Add(velocity);
-            foreach (float x in velocityList)
-            {
-                sum = sum + x;
-            }
-            velocityMedia = sum;
+            //velocity = SetVelocity(timer, prevTime);
+            //velocityList.Add(velocity);
+            //foreach (float x in velocityList)
+            //{
+            //    sum = sum + x;
+            //}
+            //velocityMedia = sum;
 
-            if (velocityList.Count == 10)
-            {
-                velocityList.RemoveAt(0);
-            }
+            //if (velocityList.Count == 10)
+            //{
+            //    velocityList.RemoveAt(0);
+            //}
 
         }
 
@@ -114,7 +118,7 @@ public class UdpEuler : MonoBehaviour
         // Timer Starts on Enter. 
         if (Input.GetKey(KeyCode.KeypadEnter))
         {
-            timer = 0f;
+            //timer = 0f;
             Debug.Log("Timer Started");
             StartCoroutine(SendDataCoroutine()); // Added to show sending data from Unity to Python via UDP
         }
@@ -128,7 +132,7 @@ public class UdpEuler : MonoBehaviour
         {
             SendData(timer.ToString("F2") + ":" + velocity.ToString("F3") + ":" + y_data.ToString("F1"));
 
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 
@@ -136,9 +140,13 @@ public class UdpEuler : MonoBehaviour
     private float SetVelocity(float timer, float prevTime)
     {
         // Calculating period between steps
-        velocity = (0.1392857f * (1 / (timer - prevTime))) + 0.285371f;
+        
+        velocity = (5.27276877f * (1 / (timer - prevTime))) - 0.5732709427f;
+        //velocity = (1 / (timer - prevTime)) ;
+        //velocity = (timer - prevTime);                  
 
-        if (velocity < 0.5f)
+
+        if (velocity < 0.0f)
         {
             velocity = 0.0f;
         }
@@ -146,10 +154,7 @@ public class UdpEuler : MonoBehaviour
         {
             velocity = 0.0f;            
         }
-        if (velocity > 20f)
-        {
-            velocity = 10f;
-        }
+        
 
         return velocity;
     }

@@ -41,16 +41,16 @@ while True:
 
             timer.append(float(data_splited[0]))
             velocity.append(float(data_splited[1]))
-            # with open("velocity.txt", "w") as file:
-            #     for i in velocity:
-            #         file.write(str(i) + '\n')
+            with open("velocity.txt", "w") as file:
+                for i in velocity:
+                    file.write(str(i) + '\n')
             angle.append(float(data_splited[2]))
 
             print(f"Count: {count_value} Timer: {timer[count_value]} Velocity: {velocity[count_value]} Y Angle: {angle[count_value]}")
 
             count_value += 1
 
-        if count_value == 1500:
+        if count_value == 600:
             print( "Plotting Graph ")
 
             fig, ax = plt.subplots()
