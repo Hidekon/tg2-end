@@ -19,14 +19,10 @@ public class MoveLegs : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        //Debug.Log(udp.y_data);
-        
+    {                
         leftLeg.transform.eulerAngles = leftStartRotation + new Vector3(0, 0, -udp.y_data);
         rightLeg.transform.eulerAngles = rightStartRotation + new Vector3(0, 0, -udp.y_data);
         
         //Debug.Log(leftLeg.transform.eulerAngles);
-
-
     }
 }

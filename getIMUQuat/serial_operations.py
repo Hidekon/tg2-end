@@ -17,10 +17,7 @@ def get_dongle_object():
     ports_list = serial.tools.list_ports.comports()
     print("Ports available: ")
     for wire in ports_list:
-        text = "Port: {0}\tSerial#:{1}\tDesc:{2} PID {3}".format(wire.device, 
-                                                                wire.serial_number, 
-                                                                wire.description,
-                                                                wire.pid)
+        text = "Port: {0}\tSerial#:{1}\tDesc:{2} PID {3}".format(wire.device, wire.serial_number, wire.description, wire.pid)
         print(text)
         if wire.pid == SMALL_IMU_DONGLE_PORT:
             portIMU = wire.device
@@ -258,13 +255,10 @@ def extract_euler_angles(data):
     return {euler_vector}
 
 def extract_eulers(data):
-    """ Manipulate data to obtain rotation matrix
-    
-    Args:
+    """ Manipulate data to obtain eulers angles
         data: Raw data that sensor send
-    
     Returns: 
-        rotation matrix dictionary
+        eulers angles vector
     """
     decoded_data = data.decode()
     list_data = decoded_data.replace('\r\n',' ').split(' ')

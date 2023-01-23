@@ -60,7 +60,6 @@ public class UdpEuler : MonoBehaviour
     {                       
         timer += Time.deltaTime;
 
-
         if(y_data < minY) // Calculating Min and Max values
         {
             minY = y_data;
@@ -76,9 +75,8 @@ public class UdpEuler : MonoBehaviour
         {
             ascending = true;
             steps++;
-            velocity = SetVelocity(timer, prevTime);
-            velocityList.Add(velocity);
-
+            velocity = SetVelocity(timer, prevTime);    
+            velocityList.Add(velocity);     // Velocity list to calculate median
             
             if (velocityList.Count == 10)
             {
@@ -86,10 +84,8 @@ public class UdpEuler : MonoBehaviour
                 {
                     sum = sum + x;
                 }
-                velocityMedia = sum / 10;
-                
+                velocityMedia = sum / 10;                
                 sum = 0;
-
                 velocityList.RemoveAt(0);
             }
             prevTime = timer;
@@ -98,32 +94,17 @@ public class UdpEuler : MonoBehaviour
         if (y_data < media && ascending == true)
         {
             ascending = false;
-            steps++;
-            //velocity = SetVelocity(timer, prevTime);
-            //velocityList.Add(velocity);
-            //foreach (float x in velocityList)
-            //{
-            //    sum = sum + x;
-            //}
-            //velocityMedia = sum;
-
-            //if (velocityList.Count == 10)
-            //{
-            //    velocityList.RemoveAt(0);
-            //}
-
+            steps++;            
         }
 
 
-        // Timer Starts on Enter. 
+        // Sending data starts on Enter. 
         if (Input.GetKey(KeyCode.KeypadEnter))
         {
             //timer = 0f;
             Debug.Log("Timer Started");
             StartCoroutine(SendDataCoroutine()); // Added to show sending data from Unity to Python via UDP
-        }
-                 
-
+        }     
     }
 
     IEnumerator SendDataCoroutine() //  Added to show sending data from Unity to Python via UDP
@@ -131,7 +112,6 @@ public class UdpEuler : MonoBehaviour
         while (true)
         {
             SendData(timer.ToString("F2") + ":" + velocity.ToString("F3") + ":" + y_data.ToString("F1"));
-
             yield return new WaitForSeconds(0.2f);
         }
     }
@@ -142,8 +122,8 @@ public class UdpEuler : MonoBehaviour
         // Calculating period between steps
         
         velocity = (5.27276877f * (1 / (timer - prevTime))) - 0.5732709427f;
-        //velocity = (1 / (timer - prevTime)) ;
-        //velocity = (timer - prevTime);                  
+        //frequency = (1 / (timer - prevTime)) ;
+        //period = (timer - prevTime);                  
 
 
         if (velocity < 0.0f)
@@ -184,8 +164,7 @@ public class UdpEuler : MonoBehaviour
 
     private void ProcessInput(string input)
     {
-        // PROCESS INPUT RECEIVED STRING HERE
-
+        
         if (!isTxStarted) // First data arrived so tx started
         {
             isTxStarted = true;

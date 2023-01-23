@@ -92,8 +92,7 @@ public class LegsRotation : MonoBehaviour
             udpSocket.SendData("c");
         }
 
-        // ____________________________________________________________________________________________
-
+       
         if (int.Parse(s_text[0]) == 1)
         {
             Quaternion current = r_legTransf.localRotation;
@@ -126,7 +125,7 @@ public class LegsRotation : MonoBehaviour
          
     }
 
-    //Functions ________________________________________________________________________________________________________
+
     public static Quaternion StringToQuaternion(string sQuaternion)
     {                              
         // Split the items

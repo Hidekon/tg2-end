@@ -27,6 +27,7 @@ prev_angle = 0
 count_value = 0
 timer, velocity, angle = [], [], []
 
+#Starting serial connection
 serial_port = serial_op.initialize_imu(imu_configuration)
 
 while True:
@@ -39,8 +40,10 @@ while True:
 
             data_splited = (data.replace(",",".")).split(':')
 
+            #Saving data for plot
             timer.append(float(data_splited[0]))
             velocity.append(float(data_splited[1]))
+            #Saving velocity values for median calculation
             with open("velocity.txt", "w") as file:
                 for i in velocity:
                     file.write(str(i) + '\n')
@@ -50,17 +53,18 @@ while True:
 
             count_value += 1
 
+        #When samples data is enough, plot graph
         if count_value == 600:
             print( "Plotting Graph ")
 
             fig, ax = plt.subplots()
             ax.plot(timer, angle, color="red", marker="o")
-            ax.set_xlabel("Time", fontsize=14)
-            ax.set_ylabel("Angle", color="red", fontsize=14)
+            ax.set_xlabel("Tempo (seg) ", fontsize=14)
+            ax.set_ylabel("Ângulo (graus)", color="red", fontsize=14)
             ax2 = ax.twinx()
             ax2.plot(timer, velocity, color="blue", marker="o")
             ax2.set_ylabel("Velocity", color="blue", fontsize=14)
-            plt.title('Angle by time')
+            plt.title('Velocidade 4 km/h')
             plt.show()
             fig.savefig('./angle_vel_time.jpg', format='jpeg', dpi=100, bbox_inches='tight')
             timer, velocity, angle = [], [], []
@@ -73,17 +77,12 @@ while True:
             data = serial_port.read(bytes_to_read)
             if data[0] != 0:
                 continue
-            # euler_data = serial_op.extract_euler_angles(data)
-            # str_euler_data = f"{euler_data[0]:.4f},{euler_data[1]:.4f},{euler_data[2]:.4f}"
-            # print(f"IMU{data[1]:}" + str_euler_data)
 
             euler_data = serial_op.extract_eulers(data)
             y_data = round(euler_data[1] * 180 / 3.14)
             # check for 0 error values
             if y_data == 0:
                 y_data = prev_angle
-
-            str_euler_data = f"{euler_data[0]:.4f},{euler_data[1]:.4f},{euler_data[2]:.4f}"
 
             # print(f"IMU{data[1]}:" + str(y_data))
 
@@ -92,15 +91,13 @@ while True:
 
     except KeyboardInterrupt:
         print(GREEN, "Keyboard excpetion occured.", RESET)
-        serial_port = serial_op.stop_streaming(serial_port,
-                                               imu_configuration['logical_ids'])
+        serial_port = serial_op.stop_streaming(serial_port, imu_configuration['logical_ids'])
         break
     except Exception:
         print(RED, "Unexpected exception occured.", RESET)
         print(traceback.format_exc())
         print(GREEN, "Stop streaming.", RESET)
-        serial_port = serial_op.stop_streaming(serial_port,
-                                               imu_configuration['logical_ids'])
+        serial_port = serial_op.stop_streaming(serial_port, imu_configuration['logical_ids'])
         break
 
 
