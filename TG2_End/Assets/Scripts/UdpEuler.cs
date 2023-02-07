@@ -153,6 +153,7 @@ public class UdpEuler : MonoBehaviour
                 y_data = float.Parse(text); // Getting the y value in angles
                 //Debug.Log(y_data);
                           
+
                 ProcessInput(text);
             }
             catch (Exception err)
